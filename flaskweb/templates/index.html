@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>text similarity</title>
+    <style>
+        tr {
+            line-height: 32px;
+        }
+
+        td {
+            padding-left: 10px
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h3>Text Similarity API</h3>
+    <table width="1200" border="1" cellspacing="0" cellpadding="0" style="BORDER-COLLAPSE: collapse">
+        <thead>
+        <tr>
+            <td>API</td>
+            <td>api/text/querydocsim</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Http Hearder</td>
+            <td>Content-Type: application/json</td>
+        </tr>
+        <tr>
+            <td>参数</td>
+            <td>请求示例：<code>
+                {
+                "keep_val": 0.8,
+                "sysno": 101,
+                "title": "标题",
+                "content": "内容"
+                }
+            </code>
+            </td>
+        </tr>
+        <tr>
+            <td>返回值</td>
+            <td>
+                返回示例：<code>
+                {
+                "Message": "ok",
+                "data": {
+                "content_ids": [
+                601
+                ],
+                "title_ids": [
+                601
+                ]
+                },
+                "success": true
+                }
+            </code></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
