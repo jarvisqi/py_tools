@@ -5,14 +5,14 @@ import os
 import pymysql
 import xlwt
 
-cfg_username = "ssss"  # 用户名
-cfg_password = "111@111"  # 连接密码
-# cfg_url = "10.0.60.29"  # 连接地址
-cfg_url = "111.111.0.11"  # 连接地址
-cfg_database = "def"  # 数据库名
+cfg_username = "root"  # 用户名
+cfg_password = "scf@123456"  # 连接密码
+cfg_url = "10.0.0.61"  # 连接地址
+cfg_database = "official_website"  # 数据库名
+cfg_port=3306
 
-cfg_db_list = ["aaa", "bbb", "ccc",
-               "ddd", "ggg"]
+cfg_db_list = ["official_website"]
+
 fname = 'database_doc.xls'
 
 
@@ -21,7 +21,7 @@ def list_table(db_name):
     # 连接数据库
     db = pymysql.Connect(
         host=cfg_url,
-        port=3307,
+        port=cfg_port,
         user=cfg_username,
         passwd=cfg_password,
         db=db_name,
@@ -39,7 +39,7 @@ def list_col(db_name, tabls_name):
     # 连接数据库
     db = pymysql.Connect(
         host=cfg_url,
-        port=3307,
+        port=cfg_port,
         user=cfg_username,
         passwd=cfg_password,
         db=db_name,
