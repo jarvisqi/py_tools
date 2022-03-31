@@ -9,17 +9,17 @@ from xlwt import Pattern
 fname = '/tools/api_doc_nums.xls'
 
 urls = {
-    'customer_svc': 'https://cloud.xinyilian.com/customer/v2/api-docs',
-    'product_svc':  'https://cloud.xinyilian.com/product/v2/api-docs',
-    'order_svc': 'https://cloud.xinyilian.com/order/v2/api-docs',
-    'rbac_svc':  'https://cloud.xinyilian.com/rbac/v2/api-docs',
-    'pay_svc':  'https://cloud.xinyilian.com/pay/v2/api-docs',
-    'cms_svc':  'https://cloud.xinyilian.com/cms/v2/api-docs',
-    'industrial_svc':  'https://cloud.xinyilian.com/industrial/v2/api-docs',
-    'wms-collaboration_svc':  'https://cloud.xinyilian.com/wms-collaboration/v2/api-docs',
-    'mmt_svc':  'https://cloud.xinyilian.com/mmt/v2/api-docs',
-    'im_svc':  'https://cloud.xinyilian.com/im/v2/api-docs',
-    'oms_svc': 'https://cloud.xinyilian.com/oms/v2/api-docs'
+    'customer_svc': 'https://10.10.10.10.1/customer/v2/api-docs',
+    'product_svc':  'https://10.10.10.10.1/product/v2/api-docs',
+    'order_svc': 'https://10.10.10.10.1/order/v2/api-docs',
+    'rbac_svc':  'https://10.10.10.10.1/rbac/v2/api-docs',
+    'pay_svc':  'https://10.10.10.10.1/pay/v2/api-docs',
+    'cms_svc':  'https://10.10.10.10.1/cms/v2/api-docs',
+    'industrial_svc':  'https://10.10.10.10.1/industrial/v2/api-docs',
+    'wms-collaboration_svc':  'https://10.10.10.10.1/wms-collaboration/v2/api-docs',
+    'mmt_svc':  'https://10.10.10.10.1/mmt/v2/api-docs',
+    'im_svc':  'https://10.10.10.10.1/im/v2/api-docs',
+    'oms_svc': 'https://10.10.10.10.1/oms/v2/api-docs'
 }
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36)"}
@@ -142,6 +142,9 @@ def sava_doc():
         print("Document has been generated")
 
     print(nums)
+
+
+
 
 if __name__ == "__main__":
 
