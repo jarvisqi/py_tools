@@ -1,6 +1,7 @@
 
 import subprocess
 import requests
+from datetime import datetime  
 
 url="https://gitlab.com/ineo6/hosts/-/raw/master/next-hosts?ref_type=heads";
 tmp_host="/tmp/host.txt";
@@ -37,7 +38,7 @@ def update():
                     new_file.write(item)  
                 new_file.close()
 
-    print("host已经更新")
+    print("host已经更新",datetime.now(),"\n")
 
     try:  
         subprocess.run(["sudo", "killall", "-HUP", "mDNSResponder"])  
