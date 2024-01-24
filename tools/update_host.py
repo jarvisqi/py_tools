@@ -3,7 +3,7 @@ import subprocess
 import requests
 from datetime import datetime  
 
-url="https://gitlab.com/ineo6/hosts/-/raw/master/next-hosts?ref_type=heads";
+url="https://gitlab.com/ineo6/hosts/-/raw/master/next-hosts";
 tmp_host="/tmp/host.txt";
 host_path="/etc/hosts"
 
