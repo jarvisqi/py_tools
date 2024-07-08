@@ -3,7 +3,7 @@ import pandas as pd
 # 需要显示的列名
 required_columns = ['企业名称', '现有人数', '正式编制人数', '需求总人数', '需求人数差', '项目部数量']
 # 需要查询的企业
-parent_company_names = ['四川高速公路建设开发集团有限公司']
+parent_company_names = ['']
 # 文件路径
 file_path = '/Desktop/财务人员信息统计-7041400.xlsx'
 
