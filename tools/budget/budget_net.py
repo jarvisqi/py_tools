@@ -21,15 +21,16 @@ class BudgetModel(nn.Module):
         return out
 
 
-def traning_mode():
+def traning_model():
   
     budgetData= BudgetData("")
     train_data, _, _, _= budgetData.load_data()
     train_loader, val_loader, _=budgetData.load_dataset()
     output_len=len(budgetData.data['预算科目'].unique())
 
+    input_len=len(train_data.columns) - 1
     # 初始化模型、损失函数和优化器
-    model = BudgetModel(input_size=len(train_data.columns) - 1, hidden_size=128, output_size=output_len)
+    model = BudgetModel(input_size=input_len, hidden_size=128, output_size=output_len)
     # CrossEntropyLoss 分类任务中常用的损失函数。
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -63,3 +64,7 @@ def traning_mode():
 
         print(f'Epoch {epoch + 1}/{num_epochs} - Train Loss: {epoch_loss:.4f} 
               - Val Loss: {val_loss:.4f} - Val Accuracy: {val_accuracy:.4f}')
+
+    traced_script_module = torch.jit.trace(model, torch.randn(1, input_len))
+    traced_script_module.save('budget_model.pt')
+    print("Budget mode has been saved !")
