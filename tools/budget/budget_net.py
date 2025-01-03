@@ -3,17 +3,21 @@ import torch.nn as nn
 from budget_data import BudgetData
 
 
+# 定义模型
 class BudgetModel(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(BudgetModel, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
         self.relu = nn.ReLU()
         self.fc2 = nn.Linear(hidden_size, output_size)
+        # Softmax 激活函数，将输出转换为概率分布。
+        self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
         out = self.fc1(x)
         out = self.relu(out)
         out = self.fc2(out)
+        out = self.softmax(out)
         return out
 
 
@@ -22,9 +26,11 @@ def traning_mode():
     budgetData= BudgetData("")
     train_data, _, _, _= budgetData.load_data()
     train_loader, val_loader, _=budgetData.load_dataset()
-
     output_len=len(budgetData.data['预算科目'].unique())
+
+    # 初始化模型、损失函数和优化器
     model = BudgetModel(input_size=len(train_data.columns) - 1, hidden_size=128, output_size=output_len)
+    # CrossEntropyLoss 分类任务中常用的损失函数。
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
