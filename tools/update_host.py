@@ -16,27 +16,27 @@ def update():
         # 关闭文件
         file.close()
 
-        # 删除第11行及以下的所有内容  
-        with open(host_path, 'r') as original_file:  
-            original_lines = original_file.readlines()  
-            # 删除第二行及以下的所有内容  
-            new_lines = original_lines[:11] + [''] * (len(original_lines) - 11)  
-            original_file.close()
+    # 删除第11行及以下的所有内容  
+    with open(host_path, 'r') as original_file:  
+        original_lines = original_file.readlines()  
+        # 删除第二行及以下的所有内容  
+        new_lines = original_lines[:11] + [''] * (len(original_lines) - 11)  
+        original_file.close()
 
-            with open(tmp_host, 'r') as tmp_file:  
-                lines = tmp_file.readlines()  
-                end=len(lines)
-                update_data=lines[2:end]
-                string_data = str(update_data)
-                for k in update_data:
-                    new_lines.append(k)
-                tmp_file.close()
+        with open(tmp_host, 'r') as tmp_file:  
+            lines = tmp_file.readlines()  
+            end=len(lines)
+            update_data=lines[2:end]
+            string_data = str(update_data)
+            for k in update_data:
+                new_lines.append(k)
+            tmp_file.close()
 
-            # 写回到文件  
-            with open(host_path, 'w') as new_file:  
-                for item in new_lines:
-                    new_file.write(item)  
-                new_file.close()
+        # 写回到文件  
+        with open(host_path, 'w') as new_file:  
+            for item in new_lines:
+                new_file.write(item)  
+            new_file.close()
 
     print("host已经更新",datetime.now(),"\n")
 
