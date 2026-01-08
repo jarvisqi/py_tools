@@ -2,7 +2,7 @@
 # https://github.com/damnever/pigar
 
 # app.py: 1
-Flask == 1.0.1
+Flask == 2.3.2
 
 # core\docsim.py: 9
 gensim == 3.4.0
