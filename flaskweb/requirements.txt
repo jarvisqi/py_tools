@@ -11,7 +11,7 @@ gensim == 3.4.0
 jieba == 0.39
 
 # core\docsim.py: 7
-numpy == 1.14.3
+numpy == 1.22.0
 
 # core\docsim.py: 8
 pandas == 0.22.0
