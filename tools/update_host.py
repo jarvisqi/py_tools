@@ -7,7 +7,7 @@ import requests
 import tempfile
 from datetime import datetime
 
-hosts_url = "https://gitee.com/if-the-wind/github-hosts/blob/main/hosts"
+hosts_url = "https://hosts.gitcdn.top/hosts.txt"
 
 
 def get_hosts_path():
@@ -59,18 +59,10 @@ def download_hosts_tempfile(url):
 
 
 def read_temp_hosts(temp_path):
-    """读取临时hosts文件内容，排除最后两行"""
+    """读取临时hosts文件内容"""
     try:
         with open(temp_path, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-        # 排除最后两行，处理文件行数不足2行的情况
-        if len(lines) <= 1:
-            content = ""
-            print("临时文件内容不足2行，将使用空内容")
-        else:
-            content = "".join(lines[:-1])  # 取所有行除了最后两行
-
-        return content.strip()
+            return f.read()
     except Exception as e:
         print(f"读取临时文件失败: {str(e)}")
         return None
@@ -86,38 +78,13 @@ def delete_temp_file(temp_path):
         print(f"删除临时文件失败: {str(e)}")
 
 
-def get_preserve_lines_count():
-    """根据操作系统返回需要保留的行数"""
-    system = platform.system()
-    return 21 if system == "Windows" else 11 if system == "Darwin" else 0
-
-
 def update_hosts(hosts_path, new_content):
-    """更新hosts文件内容，保留指定行数的原始内容"""
+    """用新内容覆盖hosts文件"""
     try:
-        # 读取原始hosts内容
-        with open(hosts_path, "r", encoding="utf-8") as f:
-            original_lines = f.readlines()
-
-        # 获取需要保留的行数
-        preserve_lines = get_preserve_lines_count()
-
-        # 确保保留行数不超过实际行数
-        actual_preserve = min(preserve_lines, len(original_lines))
-
-        # 保留前N行内容
-        preserved_content = "".join(original_lines[:actual_preserve])
-
-        # 合并保留内容和新内容
-        final_content = f"{preserved_content}\n{new_content.strip()}\n"
-
-        # 写入更新后的内容
         with open(hosts_path, "w", encoding="utf-8") as f:
-            f.write(final_content)
-
+            f.write(new_content)
         print(f"hosts文件更新成功")
         return True
-
     except PermissionError:
         print("权限不足，请以管理员身份运行脚本（Windows）或使用sudo（macOS）")
         return False
