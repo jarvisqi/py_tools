@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-api_key = "sk-3c5ea40b4efc4a12853441b3f5eae496"
+api_key = "sk-cccccccccccc"
 base_url = "https://api.deepseek.com"
 
 
