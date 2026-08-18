@@ -9,6 +9,12 @@ from datetime import datetime
 
 hosts_url = "https://hosts.gitcdn.top/hosts.txt"
 
+# 需要插入到hosts最前面的自定义条目
+CUSTOM_HOSTS_HEAD = """# notion
+119.28.13.121 www.notion.so
+119.28.13.121 msgstore.www.notion.so
+"""
+
 
 def get_hosts_path():
     """根据操作系统返回hosts文件路径"""
@@ -120,6 +126,8 @@ def main():
     if not new_hosts_content:
         delete_temp_file(temp_path)
         return
+    # 在这里插入自定义hosts到网络内容头部
+    net_hosts_content = CUSTOM_HOSTS_HEAD + "\n" + new_hosts_content
     system_name = platform.system()
     # 获取系统信息和hosts路径
     try:
@@ -139,7 +147,7 @@ def main():
             return
 
     # 更新hosts文件
-    update_success = update_hosts(hosts_path, new_hosts_content)
+    update_success = update_hosts(hosts_path, net_hosts_content)
 
     # 无论成功与否都删除临时文件
     delete_temp_file(temp_path)
