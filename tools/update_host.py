@@ -7,7 +7,7 @@ import requests
 import tempfile
 from datetime import datetime
 
-hosts_url = "https://hosts.gitcdn.top/hosts.txt"
+hosts_url = "https://raw.hellogithub.com/hosts"
 
 # 需要插入到hosts最前面的自定义条目
 CUSTOM_HOSTS_HEAD = """# notion
