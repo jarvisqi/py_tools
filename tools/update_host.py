@@ -5,15 +5,12 @@ import shutil
 import subprocess
 import requests
 import tempfile
-from datetime import datetime
 
+# 主 hosts 源（GitHub 加速）
 hosts_url = "https://raw.hellogithub.com/hosts"
 
-# 需要插入到hosts最前面的自定义条目
-CUSTOM_HOSTS_HEAD = """# notion
-119.28.13.121 www.notion.so
-119.28.13.121 msgstore.www.notion.so
-"""
+# Notion 专用 hosts 源（动态获取，替代原 CUSTOM_HOSTS_HEAD 硬编码）
+notion_hosts_url = "https://hosts.notionfaster.org"
 
 
 def get_hosts_path():
@@ -84,12 +81,34 @@ def delete_temp_file(temp_path):
         print(f"删除临时文件失败: {str(e)}")
 
 
+def fetch_notion_hosts():
+    """动态获取 Notion hosts 内容。
+
+    失败时返回空字符串（不阻断主流程，降级为只更新主 hosts）。
+    """
+    try:
+        print(f"正在获取 Notion hosts: {notion_hosts_url}")
+        response = requests.get(notion_hosts_url, timeout=10)
+        response.raise_for_status()
+        # 清理空行并保留有效条目
+        lines = [ln.strip() for ln in response.text.splitlines() if ln.strip()]
+        if not lines:
+            print("Notion hosts 内容为空，本次跳过追加")
+            return ""
+        content = "# notion (from hosts.notionfaster.org)\n" + "\n".join(lines) + "\n"
+        print(f"Notion hosts 获取成功，共 {len(lines)} 条")
+        return content
+    except Exception as e:
+        print(f"获取 Notion hosts 失败: {str(e)}，本次跳过追加")
+        return ""
+
+
 def update_hosts(hosts_path, new_content):
     """用新内容覆盖hosts文件"""
     try:
         with open(hosts_path, "w", encoding="utf-8") as f:
             f.write(new_content)
-        print(f"hosts文件更新成功")
+        print("hosts文件更新成功")
         return True
     except PermissionError:
         print("权限不足，请以管理员身份运行脚本（Windows）或使用sudo（macOS）")
@@ -115,7 +134,7 @@ def flush_dns(system):
 def main():
     print(f"准备从以下URL更新hosts: {hosts_url}")
 
-    # 下载到临时文件
+    # 下载主 hosts 到临时文件
     temp_path = download_hosts_tempfile(hosts_url)
     if not temp_path:
         print("获取hosts内容失败，更新中止")
@@ -126,8 +145,16 @@ def main():
     if not new_hosts_content:
         delete_temp_file(temp_path)
         return
-    # 在这里插入自定义hosts到网络内容头部
-    net_hosts_content = CUSTOM_HOSTS_HEAD + "\n" + new_hosts_content
+
+    # 动态获取 Notion hosts（失败则降级为空）
+    notion_content = fetch_notion_hosts()
+
+    # 拼接：Notion 放最前（同名域名优先命中），主内容在后
+    if notion_content:
+        net_hosts_content = notion_content + "\n" + new_hosts_content + "\n"
+    else:
+        net_hosts_content = new_hosts_content + "\n"
+
     system_name = platform.system()
     # 获取系统信息和hosts路径
     try:
