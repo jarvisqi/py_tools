@@ -12,6 +12,9 @@ hosts_url = "https://raw.hellogithub.com/hosts"
 # Notion 专用 hosts 源（动态获取，替代原 CUSTOM_HOSTS_HEAD 硬编码）
 notion_hosts_url = "https://hosts.notionfaster.org"
 
+# Notion hosts 只读取前 N 行
+NOTION_HOSTS_MAX_LINES = 3
+
 
 def get_hosts_path():
     """根据操作系统返回hosts文件路径"""
@@ -82,7 +85,7 @@ def delete_temp_file(temp_path):
 
 
 def fetch_notion_hosts():
-    """动态获取 Notion hosts 内容。
+    """动态获取 Notion hosts 内容（只取前 NOTION_HOSTS_MAX_LINES 行有效条目）。
 
     失败时返回空字符串（不阻断主流程，降级为只更新主 hosts）。
     """
@@ -90,13 +93,20 @@ def fetch_notion_hosts():
         print(f"正在获取 Notion hosts: {notion_hosts_url}")
         response = requests.get(notion_hosts_url, timeout=10)
         response.raise_for_status()
-        # 清理空行并保留有效条目
+
+        # 清理空行并只保留前 N 条有效条目
         lines = [ln.strip() for ln in response.text.splitlines() if ln.strip()]
         if not lines:
             print("Notion hosts 内容为空，本次跳过追加")
             return ""
-        content = "# notion (from hosts.notionfaster.org)\n" + "\n".join(lines) + "\n"
-        print(f"Notion hosts 获取成功，共 {len(lines)} 条")
+
+        selected = lines[:NOTION_HOSTS_MAX_LINES]
+        content = (
+            f"# notion (from hosts.notionfaster.org, 前 {len(selected)} 行)\n"
+            + "\n".join(selected)
+            + "\n"
+        )
+        print(f"Notion hosts 获取成功，取前 {len(selected)} 条: {selected}")
         return content
     except Exception as e:
         print(f"获取 Notion hosts 失败: {str(e)}，本次跳过追加")
@@ -146,7 +156,7 @@ def main():
         delete_temp_file(temp_path)
         return
 
-    # 动态获取 Notion hosts（失败则降级为空）
+    # 动态获取 Notion hosts（只取前 3 行，失败则降级为空）
     notion_content = fetch_notion_hosts()
 
     # 拼接：Notion 放最前（同名域名优先命中），主内容在后
